@@ -16,8 +16,14 @@
 /public/build
 /public/hot
 /public/storage
+/bootstrap/cache/*.php
 /storage/*.key
 /storage/pail
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/testing/*
+/storage/framework/views/*
+/storage/logs/*.log
 /vendor
 Homestead.json
 Homestead.yaml
