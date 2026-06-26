@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // we need at least a few directors so the movie form has something to pick from
         DB::table('directors')->updateOrInsert(
             ['director_id' => 1],
             [
@@ -39,6 +40,19 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
+        DB::table('directors')->updateOrInsert(
+            ['director_id' => 3],
+            [
+                'name' => 'Lena Cross',
+                'date_of_birth' => '1985-02-19',
+                'nationality' => 'British',
+                'picture_url' => null,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]
+        );
+
+        // these are the simple seed rows for the movie dropdown and stats
         DB::table('genres')->updateOrInsert(['genre_id' => 1], ['genre_name' => 'Thriller', 'created_at' => now(), 'updated_at' => now()]);
         DB::table('genres')->updateOrInsert(['genre_id' => 2], ['genre_name' => 'Drama', 'created_at' => now(), 'updated_at' => now()]);
         DB::table('genres')->updateOrInsert(['genre_id' => 3], ['genre_name' => 'Sci-Fi', 'created_at' => now(), 'updated_at' => now()]);
@@ -141,26 +155,46 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
+        DB::table('movies')->updateOrInsert(
+            ['movie_id' => 4],
+            [
+                'title' => 'Echo Harbor',
+                'release_year' => 2023,
+                'rating' => 7.9,
+                'language' => 'English',
+                'description' => 'A small coastal mystery that slowly turns into a family drama.',
+                'poster_url' => null,
+                'director_id' => 3,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]
+        );
+
         DB::table('movie_genres')->updateOrInsert(['movie_id' => 1, 'genre_id' => 1], []);
         DB::table('movie_genres')->updateOrInsert(['movie_id' => 1, 'genre_id' => 2], []);
         DB::table('movie_genres')->updateOrInsert(['movie_id' => 2, 'genre_id' => 3], []);
         DB::table('movie_genres')->updateOrInsert(['movie_id' => 2, 'genre_id' => 1], []);
         DB::table('movie_genres')->updateOrInsert(['movie_id' => 3, 'genre_id' => 2], []);
+        DB::table('movie_genres')->updateOrInsert(['movie_id' => 4, 'genre_id' => 2], []);
 
         DB::table('movie_cast')->updateOrInsert(['movie_id' => 1, 'actor_id' => 1], ['role_name' => 'Lead Investigator']);
         DB::table('movie_cast')->updateOrInsert(['movie_id' => 1, 'actor_id' => 2], ['role_name' => 'Night Courier']);
         DB::table('movie_cast')->updateOrInsert(['movie_id' => 1, 'actor_id' => 3], ['role_name' => 'Broadcast Analyst']);
         DB::table('movie_cast')->updateOrInsert(['movie_id' => 2, 'actor_id' => 4], ['role_name' => 'Navigator']);
         DB::table('movie_cast')->updateOrInsert(['movie_id' => 3, 'actor_id' => 3], ['role_name' => 'Director']);
+        DB::table('movie_cast')->updateOrInsert(['movie_id' => 4, 'actor_id' => 2], ['role_name' => 'Harbor Guide']);
 
         DB::table('movie_production')->updateOrInsert(['movie_id' => 1, 'company_id' => 1], []);
         DB::table('movie_production')->updateOrInsert(['movie_id' => 2, 'company_id' => 2], []);
         DB::table('movie_production')->updateOrInsert(['movie_id' => 3, 'company_id' => 1], []);
+        DB::table('movie_production')->updateOrInsert(['movie_id' => 4, 'company_id' => 2], []);
 
         DB::table('movie_awards')->updateOrInsert(['movie_id' => 1, 'award_id' => 1], []);
         DB::table('movie_awards')->updateOrInsert(['movie_id' => 1, 'award_id' => 2], []);
         DB::table('movie_awards')->updateOrInsert(['movie_id' => 2, 'award_id' => 3], []);
+        DB::table('movie_awards')->updateOrInsert(['movie_id' => 4, 'award_id' => 4], []);
 
+        // these review rows make the stats and page feel less empty
         DB::table('reviews')->updateOrInsert(
             ['review_id' => 1],
             [
@@ -179,6 +213,17 @@ class DatabaseSeeder extends Seeder
                 'user_id' => 1,
                 'rating' => 4,
                 'comment' => 'Big visuals with a clean emotional core.',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]
+        );
+        DB::table('reviews')->updateOrInsert(
+            ['review_id' => 3],
+            [
+                'movie_id' => 4,
+                'user_id' => 1,
+                'rating' => 4,
+                'comment' => 'Quiet and solid. It does the job nicely.',
                 'created_at' => now(),
                 'updated_at' => now(),
             ]

@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>CineDB</title>
+        <title>CineScope</title>
         <meta name="description" content="CineDB is a cinematic homepage for exploring movies, directors, genres, cast, awards, production companies, and reviews.">
 
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -14,6 +14,23 @@
         @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
             @vite(['resources/css/app.css', 'resources/js/app.js'])
         @endif
+
+        <style>
+            .home-flash {
+                margin: 16px 0 0;
+                padding: 12px 16px;
+                border-radius: 12px;
+                background: rgba(245, 158, 11, 0.12);
+                border: 1px solid rgba(245, 158, 11, 0.22);
+                color: #fff1c2;
+            }
+
+            .tiny-note {
+                margin: 18px 0 0;
+                color: rgba(255, 255, 255, 0.82);
+                font-size: 0.95rem;
+            }
+        </style>
     </head>
     <body class="cine-home">
         <div class="page-shell">
@@ -22,24 +39,46 @@
                     <div class="brand-mark">C</div>
                     <div>
                         <p class="eyebrow">Oracle Movie Catalog</p>
-                        <h1>CineDB</h1>
+                        <h1>CineScope</h1>
                     </div>
                 </div>
 
                 <nav class="topnav" aria-label="Primary">
+                    <a href="{{ route('home') }}">Home</a>
                     <a href="#featured">Featured</a>
                     <a href="#catalog">Catalog</a>
                     <a href="#awards">Awards</a>
                     <a href="#reviews">Reviews</a>
+                    @auth
+                        @if (auth()->user()->role === 'admin')
+                            <a href="{{ route('movies.index') }}">Admin CRUD</a>
+                        @endif
+                    @endauth
                 </nav>
 
-                <a class="ghost-button" href="#catalog">Browse movies</a>
+                <div class="hero-actions">
+                    @guest
+                        <a class="ghost-button" href="{{ route('login') }}">Login</a>
+                        <a class="ghost-button" href="{{ route('register') }}">Signup</a>
+                    @else
+                        <form action="{{ route('logout') }}" method="POST">
+                            @csrf
+                            <button class="ghost-button" type="submit">Logout</button>
+                        </form>
+                    @endguest
+                </div>
             </header>
+
+            @if (session('error'))
+                <div class="home-flash">{{ session('error') }}</div>
+            @endif
+
+            {{-- yep, this is the main home page, so the welcome screen stays public --}}
 
             <main>
                 <section class="hero-grid">
                     <div class="hero-copy">
-                        <span class="pill">IMDb-style experience for your Oracle data</span>
+                        
                         <h2>{{ $heroMovie['title'] }}</h2>
                         <p>
                             {{ $heroMovie['description'] }}
@@ -49,6 +88,19 @@
                             <a class="primary-button" href="#featured">Explore featured titles</a>
                             <a class="secondary-button" href="#catalog">View catalog overview</a>
                         </div>
+
+                        @auth
+                            <p class="tiny-note">
+                                You are logged in as {{ auth()->user()->role }}.
+                                @if (auth()->user()->role === 'admin')
+                                    Use the admin CRUD links to manage movies.
+                                @else
+                                    User accounts stay on the homepage only.
+                                @endif
+                            </p>
+                        @else
+                            <p class="tiny-note">Guest mode is just the public homepage.</p>
+                        @endauth
 
                         <div class="genre-row" aria-label="Popular genres">
                             <span>{{ $heroMovie['genre'] }}</span>
@@ -93,7 +145,7 @@
                     <div class="section-heading">
                         <div>
                             <p class="eyebrow">Featured movies</p>
-                            <h3>High-impact cards for your homepage hero rail.</h3>
+                            <h3>Movie Cards</h3>
                         </div>
                         <a href="#catalog">See all entries</a>
                     </div>
@@ -143,27 +195,26 @@
                     <article class="panel panel--wide">
                         <div class="section-heading compact">
                             <div>
-                                <p class="eyebrow">Catalog structure</p>
-                                <h3>Everything your Oracle schema can power.</h3>
+                                <p class="eyebrow">Catalog</p>
                             </div>
                         </div>
 
                         <div class="catalog-list">
                             <div>
                                 <strong>Movies</strong>
-                                <span>Title, release year, rating, language, description, poster, director</span>
+                             
                             </div>
                             <div>
                                 <strong>Cast</strong>
-                                <span>Actors, roles, and movie-to-actor relationships</span>
+                                
                             </div>
                             <div>
                                 <strong>Community</strong>
-                                <span>Reviews, scores, comments, and audience feedback</span>
+                              
                             </div>
                             <div>
                                 <strong>Business data</strong>
-                                <span>Production companies, awards, genres, and associations</span>
+                               
                             </div>
                         </div>
 
@@ -196,7 +247,7 @@
                     <div class="section-heading">
                         <div>
                             <p class="eyebrow">Reviews</p>
-                            <h3>A homepage that can highlight ratings, comments, and audience trust.</h3>
+                            
                         </div>
                     </div>
 
