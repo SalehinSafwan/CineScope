@@ -32,4 +32,9 @@ class Movie extends Model
     {
         return $this->belongsTo(Director::class, 'director_id', 'director_id');
     }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class, 'movie_id', 'movie_id');
+    }
 }

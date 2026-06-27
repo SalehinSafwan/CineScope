@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MovieController;
+use App\Http\Controllers\ReviewController;
 use Illuminate\Support\Facades\Route;
 
 // this is the real home page, so the welcome screen is back again
@@ -22,6 +23,12 @@ Route::middleware('guest')->group(function () {
 
 // logout is tiny but it still needs a route
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
+
+// user reviews belong here so people can rate movies from the list
+Route::middleware(['auth', 'role:user'])->group(function () {
+	Route::get('/reviews/create', [ReviewController::class, 'create'])->name('reviews.create');
+	Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
+});
 
 // only admins should touch the movie CRUD pages
 Route::middleware(['auth', 'role:admin'])->group(function () {

@@ -211,7 +211,7 @@ class DatabaseSeeder extends Seeder
             [
                 'movie_id' => 2,
                 'user_id' => 1,
-                'rating' => 4,
+                'rating' => 4.5,
                 'comment' => 'Big visuals with a clean emotional core.',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -222,7 +222,7 @@ class DatabaseSeeder extends Seeder
             [
                 'movie_id' => 4,
                 'user_id' => 1,
-                'rating' => 4,
+                'rating' => 3.5,
                 'comment' => 'Quiet and solid. It does the job nicely.',
                 'created_at' => now(),
                 'updated_at' => now(),

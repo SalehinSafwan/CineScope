@@ -38,7 +38,7 @@
                 <div class="brand-lockup">
                     <div class="brand-mark">C</div>
                     <div>
-                        <p class="eyebrow">Oracle Movie Catalog</p>
+                        <p class="eyebrow">Movie Catalog</p>
                         <h1>CineScope</h1>
                     </div>
                 </div>
@@ -50,6 +50,9 @@
                     <a href="#awards">Awards</a>
                     <a href="#reviews">Reviews</a>
                     @auth
+                        @if (auth()->user()->role === 'user')
+                            <a href="{{ route('reviews.create') }}">Write review</a>
+                        @endif
                         @if (auth()->user()->role === 'admin')
                             <a href="{{ route('movies.index') }}">Admin CRUD</a>
                         @endif
@@ -95,11 +98,16 @@
                                 @if (auth()->user()->role === 'admin')
                                     Use the admin CRUD links to manage movies.
                                 @else
-                                    User accounts stay on the homepage only.
+                                    Use the review page to rate movies.
                                 @endif
                             </p>
+                            @if (auth()->user()->role === 'user')
+                                <div class="hero-actions">
+                                    <a class="secondary-button" href="{{ route('reviews.create') }}">Write a review</a>
+                                </div>
+                            @endif
                         @else
-                            <p class="tiny-note">Guest mode is just the public homepage.</p>
+                            
                         @endauth
 
                         <div class="genre-row" aria-label="Popular genres">
@@ -259,10 +267,6 @@
                         <article>
                             <p>"Perfect for browsing casts, production teams, and award history without clutter."</p>
                             <span>Audience note</span>
-                        </article>
-                        <article>
-                            <p>"The visual hierarchy makes it obvious where CRUD content should land later."</p>
-                            <span>Developer note</span>
                         </article>
                     </div>
                 </section>

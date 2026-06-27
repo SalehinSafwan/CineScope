@@ -13,7 +13,7 @@ class CheckRole
     public function handle(Request $request, Closure $next, string $role): Response
     {
         if (! Auth::check() || Auth::user()->role !== $role) {
-            return redirect()->route('home')->with('error', 'Nope, this page is only for admins.');
+            return redirect()->route('home')->with('error', "Nope, this page requires the {$role} role.");
         }
 
         return $next($request);
