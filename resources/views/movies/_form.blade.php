@@ -35,6 +35,39 @@
     @error('director_id')<div class="tiny">{{ $message }}</div>@enderror
 </div>
 
+@if (! isset($movie))
+    <div class="field">
+        <label>Need a new director?</label>
+        <button class="btn-link" type="button" data-open-director-dialog>Add director without leaving this page</button>
+        <div class="tiny">You can keep the existing director list above or create a new one with name, birth year, and nationality.</div>
+    </div>
+
+    <dialog class="director-dialog" id="director-dialog">
+        <div class="director-dialog__header">
+            <h2 style="margin: 0;">Add new director</h2>
+            <button class="btn-link" type="button" data-close-director-dialog>Close</button>
+        </div>
+
+        <div class="field">
+            <label for="new_director_name">Name</label>
+            <input id="new_director_name" name="new_director_name" value="{{ old('new_director_name') }}" type="text" placeholder="Director name">
+            @error('new_director_name')<div class="tiny">{{ $message }}</div>@enderror
+        </div>
+
+        <div class="field">
+            <label for="new_director_birth_year">Birth year</label>
+            <input id="new_director_birth_year" name="new_director_birth_year" value="{{ old('new_director_birth_year') }}" type="number" min="1900" max="{{ date('Y') }}" placeholder="1984">
+            @error('new_director_birth_year')<div class="tiny">{{ $message }}</div>@enderror
+        </div>
+
+        <div class="field">
+            <label for="new_director_nationality">Nationality</label>
+            <input id="new_director_nationality" name="new_director_nationality" value="{{ old('new_director_nationality') }}" type="text" placeholder="Nigerian">
+            @error('new_director_nationality')<div class="tiny">{{ $message }}</div>@enderror
+        </div>
+    </dialog>
+@endif
+
 <div class="field">
     <label for="poster_url">Poster URL</label>
     <input id="poster_url" name="poster_url" value="{{ old('poster_url', $movie->poster_url ?? '') }}" type="text" placeholder="https://...">

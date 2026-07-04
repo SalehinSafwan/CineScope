@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\AssignsManualIncrementingId;
 use Illuminate\Database\Eloquent\Model;
 
 class Movie extends Model
 {
+    use AssignsManualIncrementingId;
+
     protected $table = 'movies';
 
     protected $primaryKey = 'movie_id';

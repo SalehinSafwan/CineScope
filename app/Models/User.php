@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\AssignsManualIncrementingId;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use AssignsManualIncrementingId, HasFactory, Notifiable;
 
     protected $primaryKey = 'user_id'; // since you used user_id instead of id
 

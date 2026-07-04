@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\AssignsManualIncrementingId;
 use Illuminate\Database\Eloquent\Model;
 
 class Director extends Model
 {
+    use AssignsManualIncrementingId;
+
     protected $table = 'directors';
 
     protected $primaryKey = 'director_id';

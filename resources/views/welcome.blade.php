@@ -30,6 +30,70 @@
                 color: rgba(255, 255, 255, 0.82);
                 font-size: 0.95rem;
             }
+
+            .catalog-filter {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 14px;
+                margin: 18px 0 24px;
+            }
+
+            .catalog-filter .filter-actions {
+                grid-column: 1 / -1;
+                display: flex;
+                gap: 10px;
+                flex-wrap: wrap;
+            }
+
+            .catalog-grid,
+            .catalog-detail-grid {
+                display: grid;
+                gap: 16px;
+                margin-top: 18px;
+            }
+
+            .catalog-grid {
+                grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            }
+
+            .catalog-card {
+                padding: 16px;
+                border-radius: 18px;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                background: linear-gradient(160deg, rgba(15, 23, 42, 0.96), rgba(31, 41, 55, 0.96));
+            }
+
+            .catalog-card--active {
+                outline: 2px solid rgba(245, 158, 11, 0.35);
+            }
+
+            .catalog-card h4 {
+                margin: 8px 0 10px;
+            }
+
+            .catalog-card p {
+                margin: 0 0 6px;
+                color: rgba(229, 231, 235, 0.85);
+            }
+
+            .detail-list {
+                display: grid;
+                gap: 10px;
+                margin-top: 12px;
+            }
+
+            .detail-item {
+                padding: 12px;
+                border-radius: 14px;
+                background: rgba(11, 18, 32, 0.9);
+                border: 1px solid rgba(255, 255, 255, 0.08);
+            }
+
+            @media (max-width: 760px) {
+                .catalog-filter {
+                    grid-template-columns: 1fr;
+                }
+            }
         </style>
     </head>
     <body class="cine-home">
@@ -54,7 +118,7 @@
                             <a href="{{ route('reviews.create') }}">Write review</a>
                         @endif
                         @if (auth()->user()->role === 'admin')
-                            <a href="{{ route('movies.index') }}">Admin CRUD</a>
+                            <a href="{{ route('movies.index') }}">Admin Section</a>
                         @endif
                     @endauth
                 </nav>
@@ -207,26 +271,104 @@
                             </div>
                         </div>
 
-                        <div class="catalog-list">
+                        <form class="catalog-filter" method="GET" action="{{ route('home') }}">
                             <div>
-                                <strong>Movies</strong>
-                             
+                                <label for="genre_id">Genre</label>
+                                <select id="genre_id" name="genre_id" onchange="this.form.submit()">
+                                    <option value="">All genres</option>
+                                    @foreach ($genres as $genre)
+                                        <option value="{{ $genre->genre_id }}" @selected((string) $selectedGenreId === (string) $genre->genre_id)>{{ $genre->genre_name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
+
                             <div>
-                                <strong>Cast</strong>
-                                
+                                <label for="movie_id">Movie</label>
+                                <select id="movie_id" name="movie_id" onchange="this.form.submit()">
+                                    <option value="">Choose a movie</option>
+                                    @foreach ($catalogMovies as $movie)
+                                        <option value="{{ $movie['movie_id'] }}" @selected((string) $selectedMovieId === (string) $movie['movie_id'])>{{ $movie['title'] }}</option>
+                                    @endforeach
+                                </select>
                             </div>
-                            <div>
-                                <strong>Community</strong>
-                              
+
+                            <div class="filter-actions">
+                                <noscript>
+                                    <button class="primary-button" type="submit">Apply filters</button>
+                                </noscript>
+                                <a class="secondary-button" href="{{ route('home') }}">Reset</a>
                             </div>
-                            <div>
-                                <strong>Business data</strong>
-                               
-                            </div>
+                        </form>
+
+                        <div class="catalog-grid">
+                            @forelse ($catalogMovies as $movie)
+                                <article class="catalog-card {{ $selectedMovie && $selectedMovie['movie_id'] === $movie['movie_id'] ? 'catalog-card--active' : '' }}">
+                                    <span class="eyebrow">{{ $movie['genre'] }}</span>
+                                    <h4>{{ $movie['title'] }}</h4>
+                                    <p>{{ $movie['director'] }}</p>
+                                    <p>{{ $movie['year'] }} · {{ $movie['rating'] }}/10</p>
+                                    <p>{{ $movie['review_count'] }} reviews</p>
+                                </article>
+                            @empty
+                                <article class="catalog-card">
+                                    <h4>No matching movies</h4>
+                                    <p>Try another genre filter or clear the current selection.</p>
+                                </article>
+                            @endforelse
                         </div>
 
-                        <div class="catalog-list">
+                        <div class="catalog-detail-grid">
+                            <article class="panel">
+                                <div class="section-heading compact">
+                                    <div>
+                                        <p class="eyebrow">Cast</p>
+                                        <h3>{{ $selectedMovie ? $selectedMovie['title'] : 'Pick a movie' }}</h3>
+                                    </div>
+                                </div>
+
+                                @if ($selectedMovie)
+                                    <div class="detail-list">
+                                        @forelse ($selectedCast as $castMember)
+                                            <div class="detail-item">
+                                                <strong>{{ $castMember->name }}</strong>
+                                                <div class="tiny">{{ $castMember->role_name ?: 'No role listed' }}</div>
+                                            </div>
+                                        @empty
+                                            <div class="detail-item">No cast data yet.</div>
+                                        @endforelse
+                                    </div>
+                                @else
+                                    <p class="muted">Select a movie to show its cast list.</p>
+                                @endif
+                            </article>
+
+                            <article class="panel">
+                                <div class="section-heading compact">
+                                    <div>
+                                        <p class="eyebrow">Reviews</p>
+                                        <h3>{{ $selectedMovie ? $selectedMovie['title'] : 'Pick a movie' }}</h3>
+                                    </div>
+                                </div>
+
+                                @if ($selectedMovie)
+                                    <div class="detail-list">
+                                        @forelse ($selectedReviews as $review)
+                                            <div class="detail-item">
+                                                <strong>{{ $review->reviewer_name ?? 'Anonymous reviewer' }}</strong>
+                                                <div class="tiny">{{ number_format((float) $review->rating, 1) }} / 10</div>
+                                                <p class="muted">{{ $review->comment ?: 'No comment provided.' }}</p>
+                                            </div>
+                                        @empty
+                                            <div class="detail-item">No reviews yet for this movie.</div>
+                                        @endforelse
+                                    </div>
+                                @else
+                                    <p class="muted">Select a movie to show its reviews.</p>
+                                @endif
+                            </article>
+                        </div>
+
+                        <div class="catalog-list" style="margin-top: 18px;">
                             <div>
                                 <strong>Top actors</strong>
                                 <span>{{ implode(', ', $topActors ?: ['No actors yet']) }}</span>

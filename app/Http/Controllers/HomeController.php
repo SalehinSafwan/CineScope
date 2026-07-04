@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $selectedGenreId = $request->integer('genre_id') ?: null;
+        $selectedMovieId = $request->integer('movie_id') ?: null;
+
         $stats = [
             ['label' => 'Movies', 'value' => (string) DB::table('movies')->count()],
             ['label' => 'Directors', 'value' => (string) DB::table('directors')->count()],
@@ -15,14 +19,20 @@ class HomeController extends Controller
             ['label' => 'Reviews', 'value' => (string) DB::table('reviews')->count()],
         ];
 
-        $movies = DB::table('movies as m')
-            ->leftJoin('directors as d', 'd.director_id', '=', 'm.director_id')
-            ->select('m.movie_id', 'm.title', 'm.release_year', 'm.rating', 'm.language', 'm.description', 'm.poster_url', 'd.name as director_name')
-            ->orderByDesc('m.rating')
-            ->orderByDesc('m.release_year')
+        $genres = DB::table('genres')
+            ->select('genre_id', 'genre_name')
+            ->orderBy('genre_name')
             ->get();
 
-        $featuredMovies = $movies->take(3)->map(function ($movie) {
+        $movies = DB::table('movie_overview_view as mov')
+            ->when($selectedGenreId, function ($query) use ($selectedGenreId) {
+                $query->whereIn('mov.movie_id', DB::table('movie_genres')->select('movie_id')->where('genre_id', $selectedGenreId));
+            })
+            ->orderByDesc('mov.average_rating')
+            ->orderByDesc('mov.release_year')
+            ->get();
+
+        $catalogMovies = $movies->map(function ($movie) {
             $genres = DB::table('movie_genres as mg')
                 ->join('genres as g', 'g.genre_id', '=', 'mg.genre_id')
                 ->where('mg.movie_id', $movie->movie_id)
@@ -40,11 +50,6 @@ class HomeController extends Controller
                 })
                 ->implode(', ');
 
-            $reviewSummary = DB::table('reviews')
-                ->where('movie_id', $movie->movie_id)
-                ->selectRaw('ROUND(NVL(AVG(rating), 0), 1) as average_rating, COUNT(*) as review_count')
-                ->first();
-
             $awards = DB::table('movie_awards as ma')
                 ->join('awards as aw', 'aw.award_id', '=', 'ma.award_id')
                 ->where('ma.movie_id', $movie->movie_id)
@@ -53,18 +58,50 @@ class HomeController extends Controller
                 ->implode(', ');
 
             return [
+                'movie_id' => $movie->movie_id,
                 'title' => $movie->title,
                 'year' => (string) $movie->release_year,
-                'rating' => number_format((float) ($reviewSummary->average_rating ?? $movie->rating), 1),
+                'rating' => number_format((float) ($movie->average_rating ?? $movie->rating), 1),
                 'genre' => $genres ?: 'Film',
                 'cast' => $cast ?: 'Cast details coming soon',
                 'director' => $movie->director_name ?: 'Unknown director',
                 'description' => $movie->description ?: 'No description yet.',
                 'poster_url' => $movie->poster_url,
-                'review_count' => (int) ($reviewSummary->review_count ?? 0),
+                'review_count' => (int) ($movie->review_count ?? 0),
                 'awards' => $awards ?: 'No awards yet',
             ];
         })->values();
+
+        $selectedMovie = $selectedMovieId
+            ? $catalogMovies->firstWhere('movie_id', $selectedMovieId)
+            : null;
+
+        $selectedMovieDetails = null;
+
+        if ($selectedMovieId) {
+            $selectedMovieDetails = DB::table('movie_overview_view as mov')
+                ->where('mov.movie_id', $selectedMovieId)
+                ->first();
+        }
+
+        $selectedCast = collect();
+        $selectedReviews = collect();
+
+        if ($selectedMovieId) {
+            $selectedCast = DB::table('movie_cast as mc')
+                ->join('actors as a', 'a.actor_id', '=', 'mc.actor_id')
+                ->where('mc.movie_id', $selectedMovieId)
+                ->orderBy('a.name')
+                ->get(['a.name', 'mc.role_name']);
+
+            $selectedReviews = DB::table('reviews as r')
+                ->leftJoin('users as u', 'u.user_id', '=', 'r.user_id')
+                ->where('r.movie_id', $selectedMovieId)
+                ->orderByDesc('r.review_id')
+                ->get(['u.name as reviewer_name', 'r.rating', 'r.comment', 'r.created_at']);
+        }
+
+        $featuredMovies = $catalogMovies->take(3);
 
         $heroMovie = $featuredMovies->first() ?? [
             'title' => 'No movies seeded yet',
@@ -100,6 +137,14 @@ class HomeController extends Controller
         return view('welcome', [
             'heroMovie' => $heroMovie,
             'featuredMovies' => $featuredMovies,
+            'catalogMovies' => $catalogMovies,
+            'genres' => $genres,
+            'selectedGenreId' => $selectedGenreId,
+            'selectedMovieId' => $selectedMovieId,
+            'selectedMovie' => $selectedMovie,
+            'selectedMovieDetails' => $selectedMovieDetails,
+            'selectedCast' => $selectedCast,
+            'selectedReviews' => $selectedReviews,
             'stats' => $stats,
             'awardSpotlight' => $awardSpotlight,
             'productionCompanies' => $productionCompanies,

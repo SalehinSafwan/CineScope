@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\AssignsManualIncrementingId;
 use Illuminate\Database\Eloquent\Model;
 
 class Review extends Model
 {
+    use AssignsManualIncrementingId;
+
     protected $table = 'reviews';
 
     protected $primaryKey = 'review_id';
