@@ -24,13 +24,14 @@ class HomeController extends Controller
             ->orderBy('genre_name')
             ->get();
 
-        $movies = DB::table('movie_overview_view as mov')
+        $movies = DB::table('movie_statistics as mov')
             ->when($selectedGenreId, function ($query) use ($selectedGenreId) {
                 $query->whereIn('mov.movie_id', DB::table('movie_genres')->select('movie_id')->where('genre_id', $selectedGenreId));
             })
             ->orderByDesc('mov.average_rating')
             ->orderByDesc('mov.release_year')
             ->get();
+
 
         $catalogMovies = $movies->map(function ($movie) {
             $genres = DB::table('movie_genres as mg')
@@ -69,6 +70,7 @@ class HomeController extends Controller
                 'poster_url' => $movie->poster_url,
                 'review_count' => (int) ($movie->review_count ?? 0),
                 'awards' => $awards ?: 'No awards yet',
+                'award_count' => (int) ($movie->award_count ?? 0),
             ];
         })->values();
 
@@ -79,7 +81,7 @@ class HomeController extends Controller
         $selectedMovieDetails = null;
 
         if ($selectedMovieId) {
-            $selectedMovieDetails = DB::table('movie_overview_view as mov')
+            $selectedMovieDetails = DB::table('movie_statistics as mov')
                 ->where('mov.movie_id', $selectedMovieId)
                 ->first();
         }

@@ -245,7 +245,7 @@
                                     <p>{{ $movie['director'] }}</p>
                                     <div class="movie-card__footer">
                                         <span>{{ $movie['review_count'] }} reviews</span>
-                                        <span>{{ $movie['awards'] }}</span>
+                                        <span>{{ $movie['award_count'] }} awards</span>
                                     </div>
                                 </div>
                             </article>
