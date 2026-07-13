@@ -136,6 +136,7 @@ class HomeController extends Controller
             ->pluck('name')
             ->all();
 
+        $actorRankings = DB::select('SELECT * FROM TABLE(get_actor_rankings())');
         return view('welcome', [
             'heroMovie' => $heroMovie,
             'featuredMovies' => $featuredMovies,
@@ -151,6 +152,7 @@ class HomeController extends Controller
             'awardSpotlight' => $awardSpotlight,
             'productionCompanies' => $productionCompanies,
             'topActors' => $topActors,
+            'actorRankings' => $actorRankings,
         ]);
     }
 }

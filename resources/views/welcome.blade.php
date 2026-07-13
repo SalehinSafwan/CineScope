@@ -379,6 +379,8 @@
                             </div>
                         </div>
                     </article>
+                    
+
 
                     <aside class="panel panel--side" id="awards">
                         <p class="eyebrow">Awards spotlight</p>
@@ -392,6 +394,23 @@
                         </ul>
                     </aside>
                 </section>
+
+                <section class="section-block" id="actor-leaderboard">
+                    <div class="section-heading">
+                        <h3>Top Actors Leaderboard</h3>
+                    </div>
+                    <ul>
+                        @forelse ($actorRankings as $actor)
+                            <li>
+                                {{ $actor->actor_name }} — 
+                                {{ $actor->movie_count }} movies, 
+                                {{ $actor->award_count }} awards
+                            </li>
+                        @empty
+                            <li>No actor rankings yet.</li>
+                        @endforelse
+                    </ul>
+                    </section>
 
                 <section class="section-block" id="reviews">
                     <div class="section-heading">
