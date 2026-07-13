@@ -62,7 +62,7 @@ class HomeController extends Controller
                 'movie_id' => $movie->movie_id,
                 'title' => $movie->title,
                 'year' => (string) $movie->release_year,
-                'rating' => number_format((float) ($movie->average_rating ?? $movie->rating), 1),
+                'rating' => number_format((float) ($movie->average_rating ?? 0), 1),
                 'genre' => $genres ?: 'Film',
                 'cast' => $cast ?: 'Cast details coming soon',
                 'director' => $movie->director_name ?: 'Unknown director',

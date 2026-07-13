@@ -306,7 +306,11 @@
                                     <span class="eyebrow">{{ $movie['genre'] }}</span>
                                     <h4>{{ $movie['title'] }}</h4>
                                     <p>{{ $movie['director'] }}</p>
-                                    <p>{{ $movie['year'] }} · {{ $movie['rating'] }}/10</p>
+                                    @if ($movie['review_count'] > 0)
+                                        <p>{{ $movie['year'] }} · {{ $movie['rating'] }}/10</p>
+                                    @else
+                                        <p>{{ $movie['year'] }} · No reviews yet</p>
+                                    @endif
                                     <p>{{ $movie['review_count'] }} reviews</p>
                                 </article>
                             @empty
