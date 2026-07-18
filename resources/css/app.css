@@ -10,18 +10,20 @@
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
+/* Premium Sapphire & Deep Carbon Core Architectures */
 :root {
     color-scheme: dark;
-    --bg: #090909;
-    --bg-soft: #111111;
-    --panel: rgba(18, 18, 18, 0.82);
-    --panel-border: rgba(255, 255, 255, 0.08);
-    --text: #f5f1ea;
-    --muted: #b9b0a4;
-    --accent: #f7b23b;
-    --accent-2: #ff7433;
-    --accent-3: #d84f3f;
-    --shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+    --bg: #0b0f19;
+    --bg-soft: #111625;
+    --panel: rgba(16, 22, 37, 0.75);
+    --panel-border: rgba(255, 255, 255, 0.06);
+    --text: #f8fafc;
+    --muted: #94a3b8;
+    --accent: #206ac5;
+    --accent-glow: rgba(32, 106, 197, 0.25);
+    --accent-2: #38bdf8;
+    --accent-3: #f43f5e;
+    --shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
 }
 
 * {
@@ -37,10 +39,10 @@ body {
     min-height: 100vh;
     font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
     background:
-        radial-gradient(circle at top left, rgba(247, 178, 59, 0.18), transparent 30%),
-        radial-gradient(circle at top right, rgba(255, 116, 51, 0.14), transparent 25%),
-        radial-gradient(circle at 50% 0%, rgba(216, 79, 63, 0.14), transparent 28%),
-        linear-gradient(180deg, #090909 0%, #0f0f11 55%, #090909 100%);
+        radial-gradient(circle at top left, rgba(32, 106, 197, 0.15), transparent 35%),
+        radial-gradient(circle at top right, rgba(56, 189, 248, 0.1), transparent 30%),
+        radial-gradient(circle at 50% 0%, rgba(30, 41, 59, 0.4), transparent 40%),
+        linear-gradient(180deg, #0b0f19 0%, #070a10 60%, #0b0f19 100%);
     color: var(--text);
 }
 
@@ -59,6 +61,7 @@ a {
     overflow-x: hidden;
 }
 
+/* Ambient layout background decorations updated to sapphire/cyan */
 .cine-home::before,
 .cine-home::after {
     content: '';
@@ -73,8 +76,8 @@ a {
     height: 28rem;
     left: -10rem;
     top: 6rem;
-    background: radial-gradient(circle, rgba(247, 178, 59, 0.22) 0%, transparent 70%);
-    filter: blur(12px);
+    background: radial-gradient(circle, rgba(32, 106, 197, 0.16) 0%, transparent 70%);
+    filter: blur(16px);
 }
 
 .cine-home::after {
@@ -82,8 +85,8 @@ a {
     height: 26rem;
     right: -12rem;
     top: 12rem;
-    background: radial-gradient(circle, rgba(255, 116, 51, 0.16) 0%, transparent 70%);
-    filter: blur(14px);
+    background: radial-gradient(circle, rgba(56, 189, 248, 0.08) 0%, transparent 70%);
+    filter: blur(18px);
 }
 
 .page-shell {
@@ -102,8 +105,9 @@ a {
     padding: 1rem 1.1rem;
     margin-top: 0.5rem;
     border: 1px solid var(--panel-border);
-    background: rgba(10, 10, 10, 0.68);
-    backdrop-filter: blur(18px);
+    background: rgba(11, 15, 25, 0.65);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border-radius: 22px;
     box-shadow: var(--shadow);
 }
@@ -123,9 +127,9 @@ a {
     font-family: 'Playfair Display', Georgia, serif;
     font-size: 1.4rem;
     font-weight: 800;
-    color: #1b1204;
-    background: linear-gradient(135deg, #ffd56a 0%, #f7b23b 50%, #ff7433 100%);
-    box-shadow: 0 16px 30px rgba(247, 178, 59, 0.3);
+    color: #0b0f19;
+    background: linear-gradient(135deg, #ffffff 0%, #206ac5 60%, #1d4ed8 100%);
+    box-shadow: 0 16px 30px rgba(32, 106, 197, 0.25);
 }
 
 .eyebrow {
@@ -133,7 +137,7 @@ a {
     text-transform: uppercase;
     letter-spacing: 0.18em;
     font-size: 0.71rem;
-    color: var(--accent);
+    color: var(--accent-2);
 }
 
 .brand-lockup h1,
@@ -173,7 +177,7 @@ a {
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    padding: 0.92rem 1.2rem;
+    padding: 0.92rem 1.4rem;
     border-radius: 999px;
     border: 1px solid transparent;
     font-weight: 700;
@@ -186,26 +190,27 @@ a {
 
 .ghost-button,
 .secondary-button {
-    border-color: rgba(255, 255, 255, 0.12);
-    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.02);
     color: var(--text);
 }
 
 .ghost-button:hover,
 .secondary-button:hover {
     transform: translateY(-1px);
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.15);
 }
 
 .primary-button {
-    color: #231400;
-    background: linear-gradient(135deg, #ffd56a 0%, #f7b23b 60%, #ff9b45 100%);
-    box-shadow: 0 18px 34px rgba(247, 178, 59, 0.26);
+    color: #0b0f19;
+    background: linear-gradient(135deg, #ffffff 0%, #206ac5 60%, #38bdf8 100%);
+    box-shadow: 0 18px 34px rgba(32, 106, 197, 0.2);
 }
 
 .primary-button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 22px 38px rgba(247, 178, 59, 0.34);
+    box-shadow: 0 22px 38px rgba(32, 106, 197, 0.35);
 }
 
 .hero-grid {
@@ -226,9 +231,9 @@ a {
     width: fit-content;
     padding: 0.55rem 0.9rem;
     border-radius: 999px;
-    border: 1px solid rgba(247, 178, 59, 0.2);
-    background: rgba(247, 178, 59, 0.08);
-    color: #ffe1a4;
+    border: 1px solid rgba(56, 189, 248, 0.15);
+    background: rgba(32, 106, 197, 0.1);
+    color: #bae6fd;
     font-size: 0.88rem;
     font-weight: 600;
 }
@@ -263,9 +268,9 @@ a {
 .award-list li {
     padding: 0.62rem 0.9rem;
     border-radius: 999px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(255, 255, 255, 0.04);
-    color: #ebe4db;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.03);
+    color: #e2e8f0;
 }
 
 .stat-grid {
@@ -283,6 +288,7 @@ a {
     border: 1px solid var(--panel-border);
     background: var(--panel);
     backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     box-shadow: var(--shadow);
 }
 
@@ -313,8 +319,8 @@ a {
     position: absolute;
     inset: auto 10% 10% 10%;
     height: 26rem;
-    background: radial-gradient(circle, rgba(247, 178, 59, 0.25), transparent 70%);
-    filter: blur(18px);
+    background: radial-gradient(circle, rgba(32, 106, 197, 0.2), transparent 70%);
+    filter: blur(24px);
 }
 
 .poster-card {
@@ -332,32 +338,34 @@ a {
     z-index: 2;
     padding: 0.55rem 0.85rem;
     border-radius: 999px;
-    background: rgba(10, 10, 10, 0.72);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(11, 15, 25, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     font-weight: 700;
 }
 
+/* Updated poster presentation cards styles */
 .poster-art {
     position: relative;
     min-height: 520px;
     background:
-        linear-gradient(180deg, rgba(20, 20, 22, 0.2), rgba(9, 9, 9, 0.92)),
-        radial-gradient(circle at top, rgba(255, 116, 51, 0.3), transparent 35%),
-        linear-gradient(135deg, #241b0b 0%, #120f13 55%, #090909 100%);
+        linear-gradient(180deg, rgba(11, 15, 25, 0.1), rgba(11, 15, 25, 0.95)),
+        radial-gradient(circle at top, rgba(32, 106, 197, 0.25), transparent 45%),
+        linear-gradient(135deg, #0f172a 0%, #0b0f19 60%, #020617 100%);
 }
 
 .poster-orb {
     position: absolute;
     border-radius: 999px;
-    filter: blur(2px);
+    filter: blur(4px);
 }
 
+/* Beautiful frosted cyan, cobalt, and slate ambient visual nodes */
 .orb-one {
     width: 12rem;
     height: 12rem;
     top: 6rem;
     left: 2.5rem;
-    background: radial-gradient(circle, rgba(255, 212, 102, 0.96), rgba(255, 154, 69, 0.1));
+    background: radial-gradient(circle, rgba(56, 189, 248, 0.4), rgba(32, 106, 197, 0.05));
 }
 
 .orb-two {
@@ -365,7 +373,7 @@ a {
     height: 18rem;
     bottom: 5rem;
     right: -2rem;
-    background: radial-gradient(circle, rgba(255, 116, 51, 0.82), rgba(255, 116, 51, 0.06));
+    background: radial-gradient(circle, rgba(32, 106, 197, 0.35), rgba(30, 41, 59, 0.02));
 }
 
 .orb-three {
@@ -373,18 +381,18 @@ a {
     height: 8rem;
     bottom: 11rem;
     left: 3rem;
-    background: radial-gradient(circle, rgba(255, 242, 220, 0.88), rgba(255, 242, 220, 0.02));
+    background: radial-gradient(circle, rgba(248, 250, 252, 0.15), transparent);
 }
 
 .poster-frame {
     position: absolute;
     inset: 1.1rem;
     border-radius: 24px;
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 20%),
-        radial-gradient(circle at 50% 28%, rgba(255, 255, 255, 0.07), transparent 26%),
-        linear-gradient(180deg, transparent 0 58%, rgba(0, 0, 0, 0.72) 100%);
+        linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 20%),
+        radial-gradient(circle at 50% 28%, rgba(255, 255, 255, 0.04), transparent 26%),
+        linear-gradient(180deg, transparent 0 58%, rgba(11, 15, 25, 0.8) 100%);
 }
 
 .poster-meta {
@@ -430,7 +438,7 @@ a {
 }
 
 .section-heading a {
-    color: var(--accent);
+    color: var(--accent-2);
     font-weight: 700;
 }
 
@@ -452,22 +460,23 @@ a {
     align-items: flex-end;
     justify-content: flex-start;
     padding: 1rem;
-    color: #241400;
+    color: #ffffff;
     font-weight: 800;
     letter-spacing: 0.08em;
     text-transform: uppercase;
 }
 
+/* Movie cards upgraded to modern deep deep gradient spectrums */
 .movie-card--gold .movie-card__poster {
-    background: linear-gradient(145deg, #f8d26c 0%, #f7b23b 45%, #7f4b00 100%);
+    background: linear-gradient(145deg, #38bdf8 0%, #206ac5 45%, #0f172a 100%);
 }
 
 .movie-card--ember .movie-card__poster {
-    background: linear-gradient(145deg, #ffb17d 0%, #ff7433 48%, #482015 100%);
+    background: linear-gradient(145deg, #6366f1 0%, #4338ca 48%, #1e1b4b 100%);
 }
 
 .movie-card--rose .movie-card__poster {
-    background: linear-gradient(145deg, #f3bec7 0%, #d84f3f 48%, #311112 100%);
+    background: linear-gradient(145deg, #f43f5e 0%, #be123c 48%, #4c0519 100%);
 }
 
 .movie-card__poster::before {
@@ -475,9 +484,9 @@ a {
     position: absolute;
     inset: 0;
     background:
-        radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.18), transparent 18%),
-        radial-gradient(circle at 75% 28%, rgba(255, 255, 255, 0.12), transparent 22%),
-        linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.16));
+        radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.12), transparent 18%),
+        radial-gradient(circle at 75% 28%, rgba(255, 255, 255, 0.08), transparent 22%),
+        linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.3));
 }
 
 .movie-card__poster span {
@@ -520,17 +529,23 @@ a {
 }
 
 .movie-card__footer span {
-    color: #ecd9b7;
+    color: #cbd5e1;
     font-size: 0.92rem;
 }
 
 .movie-card__footer button {
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
     color: var(--text);
     border-radius: 999px;
     padding: 0.55rem 0.9rem;
     font: inherit;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.movie-card__footer button:hover {
+    background: rgba(255, 255, 255, 0.08);
 }
 
 .content-split {
@@ -554,7 +569,7 @@ a {
     display: grid;
     align-content: start;
     gap: 0.9rem;
-    background: linear-gradient(180deg, rgba(255, 116, 51, 0.12), rgba(18, 18, 18, 0.82));
+    background: linear-gradient(180deg, rgba(32, 106, 197, 0.08), var(--panel));
 }
 
 .catalog-list {
@@ -565,8 +580,8 @@ a {
 .catalog-list div {
     padding: 1rem;
     border-radius: 20px;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.04);
     display: grid;
     gap: 0.3rem;
 }
@@ -602,13 +617,13 @@ a {
 
 .review-strip p {
     margin: 0 0 1rem;
-    color: #f5efe5;
+    color: #f1f5f9;
     font-size: 1rem;
     line-height: 1.7;
 }
 
 .review-strip span {
-    color: var(--accent);
+    color: var(--accent-2);
     font-weight: 700;
     font-size: 0.92rem;
 }

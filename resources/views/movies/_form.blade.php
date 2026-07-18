@@ -38,7 +38,7 @@
 @if (! isset($movie))
     <div class="field">
         <label>Need a new director?</label>
-        <button class="btn-link" type="button" data-open-director-dialog>Add director without leaving this page</button>
+        <button class="btn-link" type="button" data-open-director-dialog>ADD A NEW DIRECTOR</button>
         <div class="tiny">You can keep the existing director list above or create a new one with name, birth year, and nationality.</div>
     </div>
 
@@ -67,6 +67,17 @@
         </div>
     </dialog>
 @endif
+
+<div class="field">
+    <label for="production_company_id">Production Company</label>
+    <select id="production_company_id" name="production_company_id">
+        <option value="">Pick one</option>
+        @foreach ($productionCompanies as $company)
+            <option value="{{ $company->production_company_id }}" @selected(old('production_company_id', $movie->production_company_id ?? '') == $company->production_company_id)>{{ $company->name }}</option>
+        @endforeach
+    </select>
+    @error('production_company_id')<div class="tiny">{{ $message }}</div>@enderror
+</div>
 
 <div class="field">
     <label for="poster_url">Poster URL</label>

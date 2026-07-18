@@ -4,14 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\Director;
 use App\Models\Movie;
+use App\Models\ProductionCompany;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
 
 class MovieController extends Controller
 {
     /**
-     * show all the movies on one page
+     * Show all the movies on one page
      */
     public function index()
     {
@@ -23,17 +25,18 @@ class MovieController extends Controller
     }
 
     /**
-     * open the form for a new movie
+     * Open the form for a new movie
      */
     public function create()
     {
         $directors = Director::orderBy('name')->get();
+        $productionCompanies = ProductionCompany::orderBy('name')->get();
 
-        return view('movies.create', compact('directors'));
+        return view('movies.create', compact('directors', 'productionCompanies'));
     }
 
     /**
-     * save the new movie in the database
+     * Save the new movie in the database
      */
     public function store(Request $request)
     {
@@ -48,6 +51,7 @@ class MovieController extends Controller
             'new_director_name' => ['nullable', 'string', 'max:100'],
             'new_director_birth_year' => ['nullable', 'integer', 'min:1900', 'max:' . date('Y')],
             'new_director_nationality' => ['nullable', 'string', 'max:100'],
+            'production_company_id' => ['nullable', Rule::exists('production_companies', 'production_company_id')],
         ]);
 
         $directorId = $validated['director_id'] ?? null;
@@ -77,23 +81,32 @@ class MovieController extends Controller
             ->merge(['director_id' => $directorId])
             ->all();
 
-        Movie::create($movieData);
+        $movie = Movie::create($movieData);
+
+        // Save production company relation
+        if ($request->filled('production_company_id')) {
+            DB::table('movie_production')->insert([
+                'movie_id' => $movie->movie_id,
+                'production_company_id' => $request->production_company_id,
+            ]);
+        }
 
         return redirect()->route('movies.index')->with('success', 'Movie added.');
     }
 
     /**
-     * open the edit form for one movie
+     * Open the edit form for one movie
      */
     public function edit(Movie $movie)
     {
         $directors = Director::orderBy('name')->get();
+        $productionCompanies = ProductionCompany::orderBy('name')->get();
 
-        return view('movies.edit', compact('movie', 'directors'));
+        return view('movies.edit', compact('movie', 'directors', 'productionCompanies'));
     }
 
     /**
-     * update the movie with the new form values
+     * Update the movie with the new form values
      */
     public function update(Request $request, Movie $movie)
     {
@@ -105,15 +118,25 @@ class MovieController extends Controller
             'description' => ['nullable', 'string'],
             'poster_url' => ['nullable', 'string', 'max:500'],
             'director_id' => ['nullable', 'exists:directors,director_id'],
+            'production_company_id' => ['nullable', Rule::exists('production_companies', 'production_company_id')],
         ]);
 
         $movie->update($validated);
+
+        // Update production company relation
+        DB::table('movie_production')->where('movie_id', $movie->movie_id)->delete();
+        if ($request->filled('production_company_id')) {
+            DB::table('movie_production')->insert([
+                'movie_id' => $movie->movie_id,
+                'production_company_id' => $request->production_company_id,
+            ]);
+        }
 
         return redirect()->route('movies.index')->with('success', 'Movie updated.');
     }
 
     /**
-     * delete the movie from the database
+     * Delete the movie from the database
      */
     public function destroy(Movie $movie)
     {

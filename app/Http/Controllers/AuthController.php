@@ -9,13 +9,13 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    // this opens the login form, nothing fancy
+    // Opens the login form
     public function showLoginForm()
     {
         return view('auth.login');
     }
 
-    // this checks the email and password and then logs the person in
+    // Checks the email and password and logs the user in
     public function login(Request $request)
     {
         $validated = $request->validate([
@@ -31,41 +31,41 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
-        // admins go to the CRUD area, users go back to the home page
+        // Admins go to the CRUD area, users go back to the home page
         return redirect()->route(Auth::user()->role === 'admin' ? 'movies.index' : 'home');
     }
 
-    // this opens the signup form
+    // Opens the signup form
     public function showRegisterForm()
     {
         return view('auth.register');
     }
 
-    // this makes a new user or admin account
+    // Creates a standard user account automatically
     public function register(Request $request)
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:150'],
             'email' => ['required', 'email', 'max:150', 'unique:users,email'],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
-            'role' => ['required', 'in:user,admin'],
         ]);
 
+        // 'role' is hardcoded here to 'user' for safety, eliminating form manipulation risks
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password_hash' => Hash::make($validated['password']),
-            'role' => $validated['role'],
+            'role' => 'user', 
         ]);
 
         Auth::login($user);
         $request->session()->regenerate();
 
-        // same idea here, admin gets the admin pages and user gets the home page
-        return redirect()->route($user->role === 'admin' ? 'movies.index' : 'home');
+        // New registrations always redirect to the home page since they are always users
+        return redirect()->route('home');
     }
 
-    // this is the logout button route, so we wipe the session and go home
+    // Clear the session out and log out
     public function logout(Request $request)
     {
         Auth::logout();
