@@ -21,8 +21,9 @@ class Review extends Model
     ];
 
     protected $casts = [
-        'rating' => 'decimal:1',
-    ];
+    'movie_id' => 'string', // Ensure this matches the parent column data type
+    'rating'   => 'decimal:1',
+];
 
     public function movie()
     {
