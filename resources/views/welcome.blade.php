@@ -424,16 +424,32 @@
                         </div>
                     </div>
 
-                    <div class="review-strip">
-                        <article>
-                            <p>"Sharp, moody, and easy to navigate. The film-first layout feels premium."</p>
-                            <span>Critic note</span>
+                    <section class="content-split" id="recent-reviews">
+                        <article class="panel panel--wide">
+                            <div class="section-heading compact">
+                                <div>
+                                    <p class="eyebrow">Recent Reviews</p>
+                                </div>
+                            </div>
+
+                            <div class="catalog-grid">
+                                @forelse ($recentReviews as $review)
+                                    <article class="catalog-card">
+                                        <h4>{{ $review->movie_title }} ({{ $review->release_year }})</h4>
+                                        <p>Rating: {{ number_format($review->rating, 1) }}/10</p>
+                                        <p>"{{ $review->comment }}"</p>
+                                        <span class="eyebrow">Reviewed on {{ \Carbon\Carbon::parse($review->created_at)->format('M d, Y') }}</span>
+                                    </article>
+                                @empty
+                                    <article class="catalog-card">
+                                        <h4>No reviews yet</h4>
+                                        <p>Be the first to leave a review!</p>
+                                    </article>
+                                @endforelse
+                            </div>
                         </article>
-                        <article>
-                            <p>"Perfect for browsing casts, production teams, and award history without clutter."</p>
-                            <span>Audience note</span>
-                        </article>
-                    </div>
+                    </section>
+
                 </section>
             </main>
         </div>

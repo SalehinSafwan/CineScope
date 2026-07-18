@@ -135,6 +135,8 @@ class HomeController extends Controller
             ->take(4)
             ->pluck('name')
             ->all();
+        
+        $recentReviews = DB::table('recent_reviews')->get();
 
         $actorRankings = DB::select('SELECT * FROM TABLE(get_actor_rankings())');
         return view('welcome', [
@@ -153,6 +155,9 @@ class HomeController extends Controller
             'productionCompanies' => $productionCompanies,
             'topActors' => $topActors,
             'actorRankings' => $actorRankings,
+            'recentReviews' => $recentReviews,
         ]);
+
+        
     }
 }
