@@ -451,6 +451,30 @@
                     </section>
 
                 </section>
+
+                    <section class="content-split" id="movie-anniversaries">
+                        <article class="panel panel--wide">
+                            <div class="section-heading compact">
+                                <div>
+                                    <p class="eyebrow">Upcoming Anniversaries</p>
+                                </div>
+                            </div>
+
+                            <div class="catalog-grid">
+                                @forelse ($anniversaries as $movie)
+                                    <article class="catalog-card">
+                                        <h4>{{ $movie->title }} ({{ $movie->release_year }})</h4>
+                                        <p>{{ $movie->years_since }} years since release</p>
+                                    </article>
+                                @empty
+                                    <article class="catalog-card">
+                                        <h4>No anniversaries found</h4>
+                                    </article>
+                                @endforelse
+                            </div>
+                        </article>
+                    </section>
+
             </main>
         </div>
     </body>
